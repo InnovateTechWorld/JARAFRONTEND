@@ -43,7 +43,12 @@ export function ImageUpload({
     setIsUploading(true);
 
     try {
-      const response = await api.uploadImage(file, folder, file.name);
+      const formData = new FormData();
+      formData.append('image', file);
+      formData.append('folder', folder);
+      formData.append('altText', file.name);
+
+      const response = await api.uploadImage(formData);
       onChange(response.imageUrl);
     } catch (error) {
       console.error('Upload error:', error);

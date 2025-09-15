@@ -205,7 +205,7 @@ export function Dashboard() {
             <CardHeader>
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Link to="/payment-links" className="group">
                 <div className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all duration-200">
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
@@ -219,6 +219,41 @@ export function Dashboard() {
                   </div>
                 </div>
               </Link>
+
+              <Link to="/create-jara-page" className="group">
+                <div className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-purple-300 hover:bg-purple-50 transition-all duration-200">
+                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                    <Plus className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-900 group-hover:text-purple-700">
+                      Create Jara Page
+                    </h4>
+                    <p className="text-sm text-gray-600">Build your creator landing page</p>
+                  </div>
+                </div>
+              </Link>
+
+              {creator?.jaraPageSlug && (
+                <a
+                  href={`/u/${creator.jaraPageSlug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group"
+                >
+                  <div className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-green-300 hover:bg-green-50 transition-all duration-200">
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                      <ExternalLink className="w-5 h-5 text-green-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-900 group-hover:text-green-700">
+                        View Jara Page
+                      </h4>
+                      <p className="text-sm text-gray-600">Share your creator page with fans</p>
+                    </div>
+                  </div>
+                </a>
+              )}
 
               <Link to="/settings" className="group">
                 <div className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-green-300 hover:bg-green-50 transition-all duration-200">

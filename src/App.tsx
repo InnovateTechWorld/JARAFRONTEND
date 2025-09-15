@@ -9,6 +9,9 @@ import { PaymentLinks } from './pages/PaymentLinks';
 import { PaymentPage } from './pages/PaymentPage';
 import { PaymentSuccess } from './pages/PaymentSuccess';
 import { PublicPage } from './pages/PublicPage';
+import { JaraPage } from './pages/JaraPage';
+import { CreateJaraPage } from './pages/CreateJaraPage';
+import { Settings } from './pages/Settings';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
@@ -58,11 +61,22 @@ function AppRoutes() {
             <PaymentLinks />
           </ProtectedRoute>
         } />
+        <Route path="create-jara-page" element={
+          <ProtectedRoute>
+            <CreateJaraPage />
+          </ProtectedRoute>
+        } />
+        <Route path="settings" element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        } />
       </Route>
       {/* Public routes outside of Layout */}
       <Route path="/p/:slug" element={<PublicPage />} />
       <Route path="/pay/:slug" element={<PaymentPage />} />
       <Route path="/payment-success" element={<PaymentSuccess />} />
+      <Route path="/u/:slug" element={<JaraPage />} />
     </Routes>
   );
 }

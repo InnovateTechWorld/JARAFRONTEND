@@ -61,6 +61,16 @@ export function Navbar() {
                 >
                   Payment Links
                 </Link>
+                <Link
+                  to="/create-jara-page"
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    isActive('/create-jara-page')
+                      ? 'bg-purple-100 text-purple-700'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
+                >
+                  Create Jara Page
+                </Link>
               </div>
             )}
           </div>

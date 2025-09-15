@@ -145,6 +145,11 @@ class ApiClient {
     return this.request(`/pages/${slug}`);
   }
 
+  // Landing Page by Slug (Public)
+  async getLandingPageBySlug(slug: string) {
+    return this.request(`/landing-pages/slug/${slug}`);
+  }
+
   // Payment Link Details (Public)
   async getPaymentLinkDetails(slug: string): Promise<{ success: boolean; paymentLink: any }> {
     return this.request(`/payments/link/${slug}`);
@@ -210,14 +215,7 @@ class ApiClient {
   }
 
   // Image upload
-  async uploadImage(file: File, folder: string = 'general', altText?: string): Promise<{ success: boolean; imageUrl: string; imageId: string; fileName: string; fileSize: number; mimeType: string }> {
-    const formData = new FormData();
-    formData.append('image', file);
-    formData.append('folder', folder);
-    if (altText) {
-      formData.append('altText', altText);
-    }
-
+  async uploadImage(formData: FormData): Promise<{ success: boolean; imageUrl: string; imageId: string; fileName: string; fileSize: number; mimeType: string }> {
     // Get the current session from Supabase
     const { data: { session } } = await supabase.auth.getSession();
     const token = session?.access_token;
@@ -248,6 +246,29 @@ class ApiClient {
       fileSize: result.image?.fileSize || result.fileSize,
       mimeType: result.image?.mimeType || result.mimeType,
     };
+  }
+
+  async uploadProfilePicture(formData: FormData): Promise<{ success: boolean; imageUrl: string; message: string }> {
+    // Get the current session from Supabase
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
+
+    const config: RequestInit = {
+      method: 'POST',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: formData,
+    };
+
+    const response = await fetch(`${API_BASE_URL}/images/upload/profile-picture`, config);
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || `HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
   }
 
 }

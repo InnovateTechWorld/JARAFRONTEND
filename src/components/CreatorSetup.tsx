@@ -6,6 +6,7 @@ import { Input } from './ui/Input';
 import { Label } from './ui/Label';
 import { useCreator } from '../hooks/useCreator';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../lib/api';
 import { User, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
 

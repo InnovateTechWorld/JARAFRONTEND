@@ -81,6 +81,7 @@ export function PageBuilder() {
       const pageData = {
         ...page,
         creatorId: creator.id,
+        isPublished: true, // Auto-publish landing pages
       };
 
       if (id === 'new') {

@@ -4,6 +4,8 @@ export interface Creator {
   bio: string;
   socialLinks: string[];
   jaraPageSlug: string;
+  profileImage?: string;
+  backgroundImage?: string;
   paymentPreferences: {
     currency: string;
     flutterwave_account?: string;
@@ -34,6 +36,7 @@ export interface PaymentLink {
 export interface LandingPage {
   id: string;
   creatorId: string;
+  creator_id?: string; // API response uses snake_case
   pageType: string;
   title: string;
   subtitle?: string;
@@ -59,7 +62,7 @@ export interface LandingPage {
   metaKeywords?: string[];
   ogImageUrl?: string;
   analyticsSettings?: AnalyticsSettings;
-  paymentLinks: string[];
+  paymentLinks: PaymentLink[];
   showSocialLinks: boolean;
   showTestimonials: boolean;
   showMediaGallery: boolean;
