@@ -173,10 +173,10 @@ export function PublicPage() {
                 <CardContent className="space-y-4">
                   <p className="text-gray-700">{paymentLink.description}</p>
 
-                  {paymentLink.imageUrl && (
+                  {paymentLink.image_url && (
                     <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
                       <img
-                        src={paymentLink.imageUrl}
+                        src={paymentLink.image_url}
                         alt={paymentLink.title}
                         className="w-full h-full object-cover"
                       />
@@ -320,9 +320,9 @@ export function PublicPage() {
             return (
               <Card key={paymentLink.id} hover className="group">
                 <div className="aspect-video bg-gradient-to-br from-purple-100 to-blue-100 rounded-lg mb-4 overflow-hidden relative">
-                  {paymentLink.imageUrl ? (
+                  {paymentLink.image_url ? (
                     <img
-                      src={paymentLink.imageUrl}
+                      src={paymentLink.image_url}
                       alt={paymentLink.title}
                       className="w-full h-full object-cover"
                     />

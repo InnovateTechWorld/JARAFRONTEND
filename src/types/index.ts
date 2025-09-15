@@ -21,7 +21,7 @@ export interface PaymentLink {
   description: string;
   price: number;
   currency: string;
-  imageUrl?: string;
+  image_url?: string;
   successMessage: string;
   slug: string;
   isPublished: boolean;

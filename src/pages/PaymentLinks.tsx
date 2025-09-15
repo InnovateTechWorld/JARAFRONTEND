@@ -22,6 +22,7 @@ import {
   ExternalLink,
   Globe,
   Lock,
+  Copy,
 } from 'lucide-react';
 import { formatDistance } from 'date-fns';
 import toast from 'react-hot-toast';
@@ -34,6 +35,8 @@ export function PaymentLinks() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingLink, setEditingLink] = useState<PaymentLink | null>(null);
   const [filter, setFilter] = useState<'all' | 'published' | 'draft'>('all');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [publishingLinks, setPublishingLinks] = useState<Set<string>>(new Set());
 
   const [formData, setFormData] = useState({
     type: 'tip' as PaymentLink['type'],
@@ -41,7 +44,7 @@ export function PaymentLinks() {
     description: '',
     price: '',
     currency: 'USD',
-    imageUrl: '',
+    image_url: '',
     successMessage: 'Thank you for your payment!',
   });
 
@@ -77,6 +80,7 @@ export function PaymentLinks() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     try {
       const linkData = {
@@ -112,6 +116,8 @@ export function PaymentLinks() {
     } catch (error) {
       console.error('Error saving payment link:', error);
       toast.error('Failed to save payment link');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -122,7 +128,7 @@ export function PaymentLinks() {
       description: '',
       price: '',
       currency: 'USD',
-      imageUrl: '',
+      image_url: '',
       successMessage: 'Thank you for your payment!',
     });
     setEditingLink(null);
@@ -136,7 +142,7 @@ export function PaymentLinks() {
       description: link.description || '',
       price: link.price?.toString() || '',
       currency: link.currency || 'USD',
-      imageUrl: link.imageUrl || '',
+      image_url: link.image_url || '',
       successMessage: link.successMessage || 'Thank you for your payment!',
     });
     setEditingLink(link);
@@ -157,6 +163,8 @@ export function PaymentLinks() {
   };
 
   const handleTogglePublish = async (linkId: string, isPublished: boolean) => {
+    setPublishingLinks(prev => new Set(prev).add(linkId));
+
     try {
       await api.publishPaymentLink(linkId, !isPublished);
       setPaymentLinks(prev => prev.map(link =>
@@ -166,6 +174,29 @@ export function PaymentLinks() {
     } catch (error) {
       console.error('Error toggling publish:', error);
       toast.error('Failed to update payment link status');
+    } finally {
+      setPublishingLinks(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(linkId);
+        return newSet;
+      });
+    }
+  };
+
+  const handleCopyLink = async (slug: string) => {
+    const link = `${window.location.origin}/pay/${slug}`;
+    try {
+      await navigator.clipboard.writeText(link);
+      toast.success('Payment link copied to clipboard!');
+    } catch (error) {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = link;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      toast.success('Payment link copied to clipboard!');
     }
   };
 
@@ -252,9 +283,9 @@ export function PaymentLinks() {
               return (
                 <Card key={link.id} hover className="group">
                   <div className="aspect-video bg-gradient-to-br from-purple-100 to-blue-100 rounded-lg mb-4 overflow-hidden relative">
-                    {link.imageUrl ? (
+                    {link.image_url ? (
                       <img
-                        src={link.imageUrl}
+                        src={link.image_url}
                         alt={link.title}
                         className="w-full h-full object-cover"
                       />
@@ -299,26 +330,49 @@ export function PaymentLinks() {
                     </div>
 
                     {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center space-x-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="bg-white text-gray-900 hover:bg-gray-100"
-                        onClick={() => handleEdit(link)}
-                        leftIcon={<Edit className="w-4 h-4" />}
-                      >
-                        Edit
-                      </Button>
-                      {link.isPublished && (
+                    <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                      <div className="flex flex-col space-y-2">
+                        <div className="flex space-x-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="bg-white text-gray-900 hover:bg-gray-100"
+                            onClick={() => handleEdit(link)}
+                            leftIcon={<Edit className="w-4 h-4" />}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="bg-white text-gray-900 hover:bg-gray-100"
+                            onClick={() => handleCopyLink(link.slug)}
+                            leftIcon={<Copy className="w-4 h-4" />}
+                          >
+                            Copy
+                          </Button>
+                        </div>
                         <Button
                           size="sm"
                           variant="outline"
                           className="bg-white text-gray-900 hover:bg-gray-100"
-                          leftIcon={<ExternalLink className="w-4 h-4" />}
+                          onClick={() => window.open(`/pay/${link.slug}`, '_blank')}
+                          leftIcon={<Eye className="w-4 h-4" />}
                         >
-                          View
+                          Preview
                         </Button>
-                      )}
+                        {link.isPublished && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="bg-white text-gray-900 hover:bg-gray-100"
+                            onClick={() => window.open(`/pay/${link.slug}`, '_blank')}
+                            leftIcon={<ExternalLink className="w-4 h-4" />}
+                          >
+                            View Live
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </div>
 
@@ -350,9 +404,18 @@ export function PaymentLinks() {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleTogglePublish(link.id, link.isPublished)}
-                        leftIcon={link.isPublished ? <Lock className="w-4 h-4" /> : <Globe className="w-4 h-4" />}
+                        disabled={publishingLinks.has(link.id)}
+                        leftIcon={
+                          publishingLinks.has(link.id) ? (
+                            <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                          ) : link.isPublished ? (
+                            <Lock className="w-4 h-4" />
+                          ) : (
+                            <Globe className="w-4 h-4" />
+                          )
+                        }
                       >
-                        {link.isPublished ? 'Unpublish' : 'Publish'}
+                        {publishingLinks.has(link.id) ? 'Updating...' : link.isPublished ? 'Unpublish' : 'Publish'}
                       </Button>
                       <Button
                         variant="ghost"
@@ -476,9 +539,9 @@ export function PaymentLinks() {
                 Image (Optional)
               </label>
               <ImageUpload
-                value={formData.imageUrl}
-                onChange={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))}
-                onRemove={() => setFormData(prev => ({ ...prev, imageUrl: '' }))}
+                value={formData.image_url}
+                onChange={(url) => setFormData(prev => ({ ...prev, image_url: url }))}
+                onRemove={() => setFormData(prev => ({ ...prev, image_url: '' }))}
                 placeholder="Add an image to make your link more appealing"
                 folder="payment-links"
               />
@@ -497,12 +560,40 @@ export function PaymentLinks() {
                 type="button"
                 variant="outline"
                 onClick={resetForm}
-                className="flex-1"
+                disabled={isSubmitting}
               >
                 Cancel
               </Button>
-              <Button type="submit" className="flex-1">
-                {editingLink ? 'Update Link' : 'Create Link'}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  const previewUrl = editingLink
+                    ? `/pay/${editingLink.slug}`
+                    : `/pay/preview?${new URLSearchParams({
+                        title: formData.title,
+                        description: formData.description,
+                        price: formData.price,
+                        currency: formData.currency,
+                        imageUrl: formData.image_url,
+                        successMessage: formData.successMessage,
+                        type: formData.type
+                      }).toString()}`;
+                  window.open(previewUrl, '_blank');
+                }}
+                disabled={isSubmitting}
+              >
+                Preview
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                    {editingLink ? 'Updating...' : 'Creating...'}
+                  </>
+                ) : (
+                  editingLink ? 'Update Link' : 'Create Link'
+                )}
               </Button>
             </div>
           </form>
