@@ -51,6 +51,7 @@ export function JaraPage() {
   const navigate = useNavigate();
   const [pageData, setPageData] = useState<JaraPageData | null>(null);
   const [creator, setCreator] = useState<Creator | null>(null);
+  const [creatorPaymentLinks, setCreatorPaymentLinks] = useState<PaymentLink[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -97,6 +98,18 @@ export function JaraPage() {
 
               console.log('Transformed creator:', transformedCreator);
               setCreator(transformedCreator);
+
+              // Fetch creator's payment links
+              try {
+                const paymentLinksResponse = await api.getPaymentLinks(transformedCreator.id, { published: true });
+                if (paymentLinksResponse.success) {
+                  console.log('Creator payment links:', paymentLinksResponse.paymentLinks);
+                  setCreatorPaymentLinks(paymentLinksResponse.paymentLinks);
+                }
+              } catch (paymentLinksError) {
+                console.error('Error fetching creator payment links:', paymentLinksError);
+                // Continue without payment links
+              }
             }
           } catch (creatorError) {
             console.error('Error fetching creator:', creatorError);
@@ -133,6 +146,9 @@ export function JaraPage() {
     if (url.includes('instagram')) return Instagram;
     if (url.includes('twitter') || url.includes('x.com')) return Twitter;
     if (url.includes('youtube') || url.includes('youtu.be')) return Youtube;
+    if (url.includes('linkedin')) return LinkIcon; // Use LinkIcon for now
+    if (url.includes('facebook')) return LinkIcon; // Use LinkIcon for now
+    if (url.includes('tiktok')) return LinkIcon; // Use LinkIcon for now
     if (url.includes('music') || url.includes('spotify') || url.includes('soundcloud')) return Music;
     return LinkIcon;
   };
@@ -251,11 +267,15 @@ export function JaraPage() {
         )}
 
         {/* Payment Links Section */}
-        {landingPage.paymentLinks && landingPage.paymentLinks.length > 0 && (
+        {((landingPage.paymentLinks && landingPage.paymentLinks.length > 0) || creatorPaymentLinks.length > 0) && (
           <div className="mb-16">
             <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">Support My Work</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {landingPage.paymentLinks.map((paymentLink) => {
+              {/* Combine and deduplicate payment links */}
+              {[
+                ...(landingPage.paymentLinks || []),
+                ...creatorPaymentLinks.filter(cp => !(landingPage.paymentLinks || []).some(lp => lp.id === cp.id))
+              ].map((paymentLink) => {
                 const Icon = getPaymentTypeIcon(paymentLink.type);
 
                 return (

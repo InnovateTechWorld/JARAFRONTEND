@@ -5,16 +5,33 @@ import { Input } from '../components/ui/Input';
 import { Label } from '../components/ui/Label';
 import { Textarea } from '../components/ui/Textarea';
 import { useCreator } from '../hooks/useCreator';
-import { api } from '../lib/api';
+import { api, Creator } from '../lib/api';
 import { ImageUpload } from '../components/ui/ImageUpload';
 import { User, Camera, Palette, Save, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
+interface RawCreatorResponse {
+  id: string;
+  name: string;
+  bio: string;
+  social_links: string[];
+  profile_image?: string;
+  background_image?: string;
+  payment_preferences: {
+    currency: string;
+    flutterwave_account?: string;
+  };
+  jara_page_slug: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export function Settings() {
   const { creator, updateCreator, refetch } = useCreator();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
     bio: '',
@@ -22,18 +39,54 @@ export function Settings() {
     profileImage: '',
     backgroundImage: '',
   });
+  const [originalData, setOriginalData] = useState<typeof formData | null>(null);
 
   useEffect(() => {
-    if (creator) {
-      setFormData({
-        name: creator.name || '',
-        bio: creator.bio || '',
-        socialLinks: creator.socialLinks && creator.socialLinks.length > 0 ? creator.socialLinks : [''],
-        profileImage: creator.profileImage || '',
-        backgroundImage: creator.backgroundImage || '',
-      });
+    if (creator?.id) {
+      loadCreatorData();
+    } else {
+      setIsInitialLoading(false);
     }
-  }, [creator]);
+  }, [creator?.id]);
+
+  const loadCreatorData = async () => {
+    if (!creator?.id) return;
+
+    try {
+      setIsInitialLoading(true);
+      // Fetch creator data directly to get the latest images
+      const creatorResponse = await api.getCreator(creator.id) as unknown as { success: boolean; creator: RawCreatorResponse };
+
+      if (creatorResponse.success && creatorResponse.creator) {
+        const rawCreator = creatorResponse.creator;
+        const initialData = {
+          name: rawCreator.name || '',
+          bio: rawCreator.bio || '',
+          socialLinks: rawCreator.social_links && rawCreator.social_links.length > 0 ? rawCreator.social_links : [''],
+          profileImage: rawCreator.profile_image || '',
+          backgroundImage: rawCreator.background_image || '',
+        };
+        setFormData(initialData);
+        setOriginalData(initialData);
+      }
+    } catch (error) {
+      console.error('Error loading creator data:', error);
+      // Fallback to useCreator hook data
+      if (creator) {
+        const initialData = {
+          name: creator.name || '',
+          bio: creator.bio || '',
+          socialLinks: creator.socialLinks && creator.socialLinks.length > 0 ? creator.socialLinks : [''],
+          profileImage: creator.profileImage || '',
+          backgroundImage: creator.backgroundImage || '',
+        };
+        setFormData(initialData);
+        setOriginalData(initialData);
+      }
+    } finally {
+      setIsInitialLoading(false);
+    }
+  };
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -72,13 +125,28 @@ export function Settings() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!creator) return;
+    if (!creator || !originalData) return;
 
     try {
       setIsLoading(true);
 
       // Filter out empty social links
       const filteredSocialLinks = formData.socialLinks.filter(link => link.trim() !== '');
+      const filteredOriginalSocialLinks = originalData.socialLinks.filter(link => link.trim() !== '');
+
+      // Check if any changes were made
+      const hasChanges =
+        formData.name !== originalData.name ||
+        formData.bio !== originalData.bio ||
+        formData.profileImage !== originalData.profileImage ||
+        formData.backgroundImage !== originalData.backgroundImage ||
+        JSON.stringify(filteredSocialLinks) !== JSON.stringify(filteredOriginalSocialLinks);
+
+      if (!hasChanges) {
+        toast('No changes detected');
+        navigate('/dashboard');
+        return;
+      }
 
       const updates = {
         name: formData.name,
@@ -101,7 +169,7 @@ export function Settings() {
     }
   };
 
-  if (!creator) {
+  if (isInitialLoading || !creator) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
