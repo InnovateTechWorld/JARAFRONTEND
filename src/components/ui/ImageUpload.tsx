@@ -47,7 +47,7 @@ export function ImageUpload({
       onChange(response.imageUrl);
     } catch (error) {
       console.error('Upload error:', error);
-      setError('Failed to upload image. Please try again.');
+      setError(`Failed to upload image: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsUploading(false);
     }
@@ -71,6 +71,7 @@ export function ImageUpload({
         <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-lg flex items-center justify-center">
           <div className="flex gap-2">
             <Button
+              type="button"
               variant="outline"
               size="sm"
               onClick={() => {
@@ -91,6 +92,7 @@ export function ImageUpload({
             </Button>
             {onRemove && (
               <Button
+                type="button"
                 variant="danger"
                 size="sm"
                 onClick={onRemove}
@@ -142,6 +144,7 @@ export function ImageUpload({
 
           {!isDragActive && !isUploading && (
             <Button
+              type="button"
               variant="outline"
               size="sm"
               leftIcon={<Upload className="w-4 h-4" />}

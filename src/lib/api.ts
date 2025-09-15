@@ -237,7 +237,17 @@ class ApiClient {
       throw new Error(error.message || `HTTP error! status: ${response.status}`);
     }
 
-    return response.json();
+    const result = await response.json();
+
+    // Transform the response to match the expected interface
+    return {
+      success: result.success,
+      imageUrl: result.image?.url || result.imageUrl,
+      imageId: result.image?.id || result.imageId,
+      fileName: result.image?.fileName || result.fileName,
+      fileSize: result.image?.fileSize || result.fileSize,
+      mimeType: result.image?.mimeType || result.mimeType,
+    };
   }
 
 }
