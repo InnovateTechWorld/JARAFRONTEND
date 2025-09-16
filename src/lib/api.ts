@@ -271,6 +271,24 @@ class ApiClient {
     return response.json();
   }
 
+  // AI Landing Page Generation
+  async generateLandingPage(data: {
+    prompt: string;
+    images?: string[];
+    pageType?: string;
+    targetAudience?: string;
+    tone?: string;
+  }): Promise<{ success: boolean; message: string; landingPage: LandingPage; generatedPaymentLinks: any[] }> {
+    return this.request('/ai/generate', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getGenerationTemplates(): Promise<{ success: boolean; templates: any[] }> {
+    return this.request('/ai/landing-pages/templates');
+  }
+
 }
 
 export const api = new ApiClient();

@@ -10,8 +10,10 @@ import { PaymentPage } from './pages/PaymentPage';
 import { PaymentSuccess } from './pages/PaymentSuccess';
 import { PublicPage } from './pages/PublicPage';
 import { JaraPage } from './pages/JaraPage';
+import { AIGeneratedPage } from './pages/AIGeneratedPage';
 import { CreateJaraPage } from './pages/CreateJaraPage';
 import { Settings } from './pages/Settings';
+import { AIGenerator } from './pages/AIGenerator';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
@@ -71,12 +73,18 @@ function AppRoutes() {
             <Settings />
           </ProtectedRoute>
         } />
+        <Route path="ai-generator" element={
+          <ProtectedRoute>
+            <AIGenerator />
+          </ProtectedRoute>
+        } />
       </Route>
       {/* Public routes outside of Layout */}
       <Route path="/p/:slug" element={<PublicPage />} />
       <Route path="/pay/:slug" element={<PaymentPage />} />
       <Route path="/payment-success" element={<PaymentSuccess />} />
       <Route path="/u/:slug" element={<JaraPage />} />
+      <Route path="/ai/:slug" element={<AIGeneratedPage />} />
     </Routes>
   );
 }

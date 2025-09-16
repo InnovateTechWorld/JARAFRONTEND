@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../ui/Button';
-import { LogOut, Settings, User, Sparkles, LayoutDashboard } from 'lucide-react';
+import { LogOut, Settings, User, Sparkles, LayoutDashboard, Wand2 } from 'lucide-react';
 import { Menu, Transition } from '@headlessui/react';
 
 export function Navbar() {
@@ -70,6 +70,16 @@ export function Navbar() {
                   }`}
                 >
                   Create Jara Page
+                </Link>
+                <Link
+                  to="/ai-generator"
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    isActive('/ai-generator')
+                      ? 'bg-purple-100 text-purple-700'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
+                >
+                  AI Generator
                 </Link>
               </div>
             )}
