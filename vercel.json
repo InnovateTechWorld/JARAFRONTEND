@@ -1,0 +1,15 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/dashboard", "destination": "/index.html" },
+    { "source": "/movies", "destination": "/index.html" },
+    { "source": "/settings", "destination": "/index.html" },
+    { "source": "/pay/:path*", "destination": "/index.html" },
+    { "source": "/payment-success", "destination": "/index.html" },
+    { "source": "/u/:path*", "destination": "/index.html" },
+    { "source": "/auth", "destination": "/index.html" },
+    { "source": "/login", "destination": "/index.html" },
+    { "source": "/register", "destination": "/index.html" },
+    { "source": "/videos", "destination": "/index.html" }
+  ]
+}
