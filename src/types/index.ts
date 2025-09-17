@@ -161,3 +161,19 @@ export interface AIPageSuggestion {
   ctaButtons: CTAButton[];
   themeSettings: ThemeSettings;
 }
+
+export interface Video {
+  id: string;
+  userId: string;
+  title: string;
+  description: string;
+  url: string;
+  coverImageUrl?: string;
+  fileName: string;
+  fileSize: number;
+  mimeType: string;
+  isPublic: boolean;
+  uploadedAt: string;
+  createdAt: string;
+  updatedAt: string;
+}

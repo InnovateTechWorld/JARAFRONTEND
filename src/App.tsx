@@ -14,6 +14,7 @@ import { AIGeneratedPage } from './pages/AIGeneratedPage';
 import { CreateJaraPage } from './pages/CreateJaraPage';
 import { Settings } from './pages/Settings';
 import { AIGenerator } from './pages/AIGenerator';
+import Videos from './pages/Videos';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
@@ -76,6 +77,11 @@ function AppRoutes() {
         <Route path="ai-generator" element={
           <ProtectedRoute>
             <AIGenerator />
+          </ProtectedRoute>
+        } />
+        <Route path="videos" element={
+          <ProtectedRoute>
+            <Videos />
           </ProtectedRoute>
         } />
       </Route>

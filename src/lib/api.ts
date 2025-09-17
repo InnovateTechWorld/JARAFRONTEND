@@ -289,6 +289,57 @@ class ApiClient {
     return this.request('/ai/landing-pages/templates');
   }
 
+  // Video Management
+  async uploadVideo(formData: FormData): Promise<{ success: boolean; videoUrl: string; coverImageUrl?: string; videoId: string; fileName: string; fileSize: number; mimeType: string }> {
+    // Get the current session from Supabase
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
+
+    const config: RequestInit = {
+      method: 'POST',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: formData,
+    };
+
+    const response = await fetch(`${API_BASE_URL}/videos/upload`, config);
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || `HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
+  }
+
+  async getVideo(videoId: string): Promise<{ success: boolean; video: any }> {
+    return this.request(`/videos/${videoId}`);
+  }
+
+  async getUserVideos(userId: string, filters?: { isPublic?: boolean; limit?: number; offset?: number }): Promise<{ success: boolean; videos: any[]; total: number }> {
+    const params = new URLSearchParams();
+    if (filters?.isPublic !== undefined) params.set('isPublic', filters.isPublic.toString());
+    if (filters?.limit) params.set('limit', filters.limit.toString());
+    if (filters?.offset) params.set('offset', filters.offset.toString());
+
+    return this.request(`/videos/user/${userId}?${params}`);
+  }
+
+  async getPublicVideos(filters?: { limit?: number; offset?: number }): Promise<{ success: boolean; videos: any[]; total: number }> {
+    const params = new URLSearchParams();
+    if (filters?.limit) params.set('limit', filters.limit.toString());
+    if (filters?.offset) params.set('offset', filters.offset.toString());
+
+    return this.request(`/videos/public?${params}`);
+  }
+
+  async deleteVideo(videoId: string): Promise<{ success: boolean }> {
+    return this.request(`/videos/${videoId}`, {
+      method: 'DELETE',
+    });
+  }
+
 }
 
 export const api = new ApiClient();
