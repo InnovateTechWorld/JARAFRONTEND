@@ -28,7 +28,7 @@ import { formatDistance } from 'date-fns';
 import toast from 'react-hot-toast';
 import { Navigate } from 'react-router-dom';
 
-export function PaymentLinks() {
+export function Movies() {
   const { creator, isLoading: creatorLoading } = useCreator();
   const [paymentLinks, setPaymentLinks] = useState<PaymentLink[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,13 +39,13 @@ export function PaymentLinks() {
   const [publishingLinks, setPublishingLinks] = useState<Set<string>>(new Set());
 
   const [formData, setFormData] = useState({
-    type: 'tip' as PaymentLink['type'],
+    type: 'product' as PaymentLink['type'],
     title: '',
     description: '',
     price: '',
     currency: 'USD',
     image_url: '',
-    successMessage: 'Thank you for your payment!',
+    successMessage: '67889jara',
   });
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export function PaymentLinks() {
       setPaymentLinks(response.paymentLinks || []);
     } catch (error) {
       console.error('Error loading payment links:', error);
-      toast.error('Failed to load payment links');
+      toast.error('Failed to load movies');
       setPaymentLinks([]);
     } finally {
       setIsLoading(false);
@@ -94,7 +94,7 @@ export function PaymentLinks() {
         setPaymentLinks(prev => prev.map(link =>
           link.id === editingLink.id ? { ...link, ...linkData } : link
         ));
-        toast.success('Payment link updated successfully!');
+        toast.success('Movie updated successfully!');
       } else {
         const response = await api.createPaymentLink(linkData);
         setPaymentLinks(prev => [response.paymentLink, ...prev]);
@@ -103,7 +103,7 @@ export function PaymentLinks() {
         const generatedLink = `${window.location.origin}/pay/${response.paymentLink.slug}`;
         toast.success(
           <div>
-            <p>Payment link created successfully!</p>
+            <p>Movie added successfully!</p>
             <p className="text-sm mt-1">
               Share this link: <a href={generatedLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{generatedLink}</a>
             </p>
@@ -115,7 +115,7 @@ export function PaymentLinks() {
       resetForm();
     } catch (error) {
       console.error('Error saving payment link:', error);
-      toast.error('Failed to save payment link');
+      toast.error('Failed to save movie');
     } finally {
       setIsSubmitting(false);
     }
@@ -123,13 +123,13 @@ export function PaymentLinks() {
 
   const resetForm = () => {
     setFormData({
-      type: 'tip',
+      type: 'product',
       title: '',
       description: '',
       price: '',
       currency: 'USD',
       image_url: '',
-      successMessage: 'Thank you for your payment!',
+      successMessage: '67889jara',
     });
     setEditingLink(null);
     setShowCreateModal(false);
@@ -143,19 +143,19 @@ export function PaymentLinks() {
       price: link.price?.toString() || '',
       currency: link.currency || 'USD',
       image_url: link.image_url || '',
-      successMessage: link.successMessage || 'Thank you for your payment!',
+      successMessage: '67889jara', // Always use hardcoded token
     });
     setEditingLink(link);
     setShowCreateModal(true);
   };
 
   const handleDelete = async (linkId: string) => {
-    if (!confirm('Are you sure you want to delete this payment link?')) return;
+    if (!confirm('Are you sure you want to delete this movie?')) return;
 
     try {
       // await api.deletePaymentLink(linkId);
       setPaymentLinks(prev => prev.filter(link => link.id !== linkId));
-      toast.success('Payment link deleted successfully');
+      toast.success('Movie deleted successfully');
     } catch (error) {
       console.error('Error deleting payment link:', error);
       toast.error('Failed to delete payment link');
@@ -170,10 +170,10 @@ export function PaymentLinks() {
       setPaymentLinks(prev => prev.map(link =>
         link.id === linkId ? { ...link, isPublished: !isPublished } : link
       ));
-      toast.success(`Payment link ${!isPublished ? 'published' : 'unpublished'} successfully`);
+      toast.success(`Movie ${!isPublished ? 'published' : 'unpublished'} successfully`);
     } catch (error) {
       console.error('Error toggling publish:', error);
-      toast.error('Failed to update payment link status');
+      toast.error('Failed to update movie status');
     } finally {
       setPublishingLinks(prev => {
         const newSet = new Set(prev);
@@ -196,7 +196,7 @@ export function PaymentLinks() {
       textArea.select();
       document.execCommand('copy');
       document.body.removeChild(textArea);
-      toast.success('Payment link copied to clipboard!');
+      toast.success('Movie link copied to clipboard!');
     }
   };
 
@@ -225,8 +225,8 @@ export function PaymentLinks() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Loading payment links...</p>
+          <div className="w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading movies...</p>
         </div>
       </div>
     );
@@ -237,16 +237,16 @@ export function PaymentLinks() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Payment Links</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Movies</h1>
             <p className="text-gray-600">
-              Create and manage payment links for tips, products, and services
+              Create and manage your movies for rental
             </p>
           </div>
           <Button
             onClick={() => setShowCreateModal(true)}
             leftIcon={<Plus className="w-4 h-4" />}
           >
-            Create Link
+            Add Movie
           </Button>
         </div>
 
@@ -437,20 +437,20 @@ export function PaymentLinks() {
               <CreditCard className="w-8 h-8 text-purple-600" />
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {filter === 'published' ? 'No published links' : filter === 'draft' ? 'No draft links' : 'No payment links yet'}
+              {filter === 'published' ? 'No published movies' : filter === 'draft' ? 'No draft movies' : 'No movies yet'}
             </h3>
             <p className="text-gray-600 mb-6">
               {filter === 'published'
-                ? 'Publish your first payment link to start accepting payments.'
+                ? 'Publish your first movie to start sharing.'
                 : filter === 'draft'
-                ? 'Create a new payment link or check your published links.'
-                : 'Create your first payment link to start monetizing your content.'}
+                ? 'Add a new movie or check your published movies.'
+                : 'Add your first movie to start sharing your work.'}
             </p>
             <Button
               onClick={() => setShowCreateModal(true)}
               leftIcon={<Plus className="w-4 h-4" />}
             >
-              Create Your First Link
+              Add Your First Movie
             </Button>
           </div>
         )}
@@ -459,30 +459,11 @@ export function PaymentLinks() {
         <Modal
           isOpen={showCreateModal}
           onClose={resetForm}
-          title={editingLink ? 'Edit Payment Link' : 'Create Payment Link'}
+          title={editingLink ? 'Edit Movie' : 'Add Movie'}
           size="lg"
         >
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Link Type
-                </label>
-                <select
-                  value={formData.type}
-                  onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value as PaymentLink['type'] }))}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none"
-                  required
-                >
-                  <option value="tip">Tip/Donation</option>
-                  <option value="product">Product</option>
-                  <option value="membership">Membership</option>
-                  <option value="pay_per_view">Pay Per View</option>
-                  <option value="rental">Rental</option>
-                  <option value="ticket">Ticket</option>
-                </select>
-              </div>
-
               <div className="grid grid-cols-2 gap-2">
                 <Input
                   label="Price"
@@ -547,13 +528,6 @@ export function PaymentLinks() {
               />
             </div>
 
-            <Input
-              label="Success Message"
-              value={formData.successMessage}
-              onChange={(e) => setFormData(prev => ({ ...prev, successMessage: e.target.value }))}
-              placeholder="Message shown after successful payment"
-              required
-            />
 
             <div className="flex space-x-3 pt-4">
               <Button

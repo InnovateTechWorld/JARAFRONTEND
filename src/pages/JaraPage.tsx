@@ -157,7 +157,7 @@ export function JaraPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-600">Loading page...</p>
         </div>
       </div>
@@ -201,7 +201,7 @@ export function JaraPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section with Background */}
       <div
-        className="relative bg-gradient-to-br from-purple-600 via-purple-700 to-blue-800 text-white"
+        className="relative bg-gradient-to-br from-red-600 via-red-700 to-red-800 text-white"
         style={{
           backgroundImage: creatorInfo?.backgroundImage ? `url(${creatorInfo.backgroundImage})` : undefined,
           backgroundSize: 'cover',
@@ -228,8 +228,8 @@ export function JaraPage() {
 
             {/* Creator Info */}
             <h1 className="text-4xl font-bold mb-2">{creatorInfo?.name || landingPage.heroTitle}</h1>
-            <p className="text-xl text-purple-100 mb-4">{landingPage.heroSubtitle}</p>
-            <p className="text-lg text-purple-200 max-w-2xl mx-auto">{creatorInfo?.bio || landingPage.heroDescription}</p>
+            <p className="text-xl text-red-100 mb-4">{landingPage.heroSubtitle}</p>
+            <p className="text-lg text-red-200 max-w-2xl mx-auto">{creatorInfo?.bio || landingPage.heroDescription}</p>
 
             {/* Social Links */}
             {creatorInfo?.socialLinks && creatorInfo.socialLinks.length > 0 && (
@@ -269,18 +269,18 @@ export function JaraPage() {
         {/* Payment Links Section */}
         {((landingPage.paymentLinks && landingPage.paymentLinks.length > 0) || creatorPaymentLinks.length > 0) && (
           <div className="mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">Support My Work</h2>
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">My Movies</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Combine and deduplicate payment links */}
+              {/* Combine and deduplicate payment links, filter by type product */}
               {[
                 ...(landingPage.paymentLinks || []),
                 ...creatorPaymentLinks.filter(cp => !(landingPage.paymentLinks || []).some(lp => lp.id === cp.id))
-              ].map((paymentLink) => {
+              ].filter(paymentLink => paymentLink.type === 'product').map((paymentLink) => {
                 const Icon = getPaymentTypeIcon(paymentLink.type);
 
                 return (
                   <Card key={paymentLink.id} hover className="group">
-                    <div className="aspect-video bg-gradient-to-br from-purple-100 to-blue-100 rounded-lg mb-4 overflow-hidden relative">
+                    <div className="aspect-video bg-gradient-to-br from-red-100 to-red-200 rounded-lg mb-4 overflow-hidden relative">
                       {paymentLink.image_url ? (
                         <img
                           src={paymentLink.image_url}
@@ -289,7 +289,7 @@ export function JaraPage() {
                         />
                       ) : (
                         <div className="flex items-center justify-center h-full">
-                          <Icon className="w-8 h-8 text-purple-400" />
+                          <Icon className="w-8 h-8 text-red-400" />
                         </div>
                       )}
 
@@ -307,7 +307,7 @@ export function JaraPage() {
 
                     <div className="space-y-3">
                       <div>
-                        <h3 className="font-semibold text-gray-900 group-hover:text-purple-700 transition-colors">
+                        <h3 className="font-semibold text-gray-900 group-hover:text-red-700 transition-colors">
                           {paymentLink.title}
                         </h3>
                         <p className="text-sm text-gray-600 mt-1 line-clamp-2">
@@ -327,7 +327,7 @@ export function JaraPage() {
                           onClick={() => navigate(`/pay/${paymentLink.slug}`)}
                           leftIcon={<ExternalLink className="w-4 h-4" />}
                         >
-                          Buy Now
+                          Rent Now
                         </Button>
                       </div>
                     </div>

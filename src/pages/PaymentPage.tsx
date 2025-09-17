@@ -145,7 +145,7 @@ export function PaymentPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <Loader className="w-8 h-8 animate-spin mx-auto mb-4 text-purple-600" />
+          <Loader className="w-8 h-8 animate-spin mx-auto mb-4 text-red-600" />
           <p className="text-gray-600">Loading payment details...</p>
         </div>
       </div>
@@ -254,8 +254,8 @@ export function PaymentPage() {
                 <div className="border-t pt-4">
                   <h3 className="font-medium text-gray-900 mb-2">Created by</h3>
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                      <User className="w-5 h-5 text-purple-600" />
+                    <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                      <User className="w-5 h-5 text-red-600" />
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">{paymentLink.creator.name}</p>
@@ -271,7 +271,7 @@ export function PaymentPage() {
           <div>
             <Card>
               <CardHeader>
-                <CardTitle>Complete Your Payment</CardTitle>
+                <CardTitle>Rent This Movie</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
@@ -309,7 +309,7 @@ export function PaymentPage() {
                       onClick={() => setPaymentMethod('fiat')}
                       className={`p-4 border rounded-lg text-center transition-colors ${
                         paymentMethod === 'fiat'
-                          ? 'border-purple-500 bg-purple-50 text-purple-700'
+                          ? 'border-red-500 bg-red-50 text-red-700'
                           : 'border-gray-300 hover:border-gray-400'
                       }`}
                     >
@@ -321,7 +321,7 @@ export function PaymentPage() {
                       onClick={() => setPaymentMethod('crypto')}
                       className={`p-4 border rounded-lg text-center transition-colors ${
                         paymentMethod === 'crypto'
-                          ? 'border-purple-500 bg-purple-50 text-purple-700'
+                          ? 'border-red-500 bg-red-50 text-red-700'
                           : 'border-gray-300 hover:border-gray-400'
                       }`}
                     >
@@ -339,7 +339,7 @@ export function PaymentPage() {
                       id="currency"
                       value={customerData.currency}
                       onChange={(e) => setCustomerData(prev => ({ ...prev, currency: e.target.value }))}
-                      className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none"
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-500/20 focus:outline-none"
                     >
                       <option value="USD">USD - US Dollar</option>
                       <option value="EUR">EUR - Euro</option>
@@ -357,7 +357,7 @@ export function PaymentPage() {
                       id="cryptoCurrency"
                       value={cryptoCurrency}
                       onChange={(e) => setCryptoCurrency(e.target.value)}
-                      className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none"
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-red-500 focus:ring-2 focus:ring-red-500/20 focus:outline-none"
                     >
                       <option value="BTC">BTC - Bitcoin</option>
                       <option value="ETH">ETH - Ethereum</option>
@@ -381,7 +381,7 @@ export function PaymentPage() {
                   ) : (
                     <>
                       <DollarSign className="w-4 h-4 mr-2" />
-                      Pay {paymentMethod === 'fiat' ? customerData.currency : cryptoCurrency} {paymentMethod === 'fiat' ? paymentLink.price : 'Equivalent'}
+                      Rent for {paymentMethod === 'fiat' ? customerData.currency : cryptoCurrency} {paymentMethod === 'fiat' ? paymentLink.price : 'Equivalent'}
                     </>
                   )}
                 </Button>

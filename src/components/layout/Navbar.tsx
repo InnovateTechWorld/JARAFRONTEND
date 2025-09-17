@@ -23,7 +23,7 @@ export function Navbar() {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-8">
             <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center">
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-bold text-gray-900">Jara</span>
@@ -35,56 +35,26 @@ export function Navbar() {
                   to="/dashboard"
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     isActive('/dashboard')
-                      ? 'bg-purple-100 text-purple-700'
+                      ? 'bg-red-100 text-red-700'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                   }`}
                 >
                   Dashboard
                 </Link>
                 <Link
-                  to="/pages"
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    isActive('/pages')
-                      ? 'bg-purple-100 text-purple-700'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
-                >
-                  Pages
-                </Link>
-                <Link
-                  to="/payment-links"
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    isActive('/payment-links')
-                      ? 'bg-purple-100 text-purple-700'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
-                >
-                  Payment Links
-                </Link>
-                <Link
-                  to="/create-jara-page"
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    isActive('/create-jara-page')
-                      ? 'bg-purple-100 text-purple-700'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
-                >
-                  Create Jara Page
-                </Link>
-                <Link
-                  to="/ai-generator"
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    isActive('/ai-generator')
-                      ? 'bg-purple-100 text-purple-700'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
-                >
-                  AI Generator
-                </Link>
-                <Link
                   to="/videos"
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     isActive('/videos')
+                      ? 'bg-red-100 text-red-700'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
+                >
+                  Movies
+                </Link>
+                <Link
+                  to="/movies"
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    isActive('/movies')
                       ? 'bg-purple-100 text-purple-700'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                   }`}
@@ -99,7 +69,7 @@ export function Navbar() {
             {user ? (
               <Menu as="div" className="relative">
                 <Menu.Button className="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none">
-                  <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-red-700 rounded-full flex items-center justify-center">
                     <User className="w-4 h-4 text-white" />
                   </div>
                   <span className="hidden md:block">{user.email}</span>

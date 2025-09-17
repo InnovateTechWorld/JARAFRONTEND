@@ -15,6 +15,7 @@ import {
   Edit,
   ExternalLink,
   DollarSign,
+  Copy,
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import toast from 'react-hot-toast';
@@ -61,6 +62,25 @@ export function Dashboard() {
     }
   };
 
+  const handleCopyJaraLink = async () => {
+    if (!creator?.jaraPageSlug) return;
+
+    const link = `${window.location.origin}/u/${creator.jaraPageSlug}`;
+    try {
+      await navigator.clipboard.writeText(link);
+      toast.success('Jara page link copied to clipboard!');
+    } catch (error) {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = link;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      toast.success('Jara page link copied to clipboard!');
+    }
+  };
+
   // Show creator setup if user doesn't have a creator profile
   if (!creatorLoading && !creator) {
     return <CreatorSetup />;
@@ -70,7 +90,7 @@ export function Dashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-600">Loading dashboard...</p>
         </div>
       </div>
@@ -95,7 +115,7 @@ export function Dashboard() {
       change: '+8.2%',
     },
     {
-      title: 'Payment Links',
+      title: 'Movies',
       value: stats?.publishedLinks.toString() || '0',
       icon: FileText,
       color: 'text-purple-600',
@@ -111,7 +131,7 @@ export function Dashboard() {
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
             <p className="text-gray-600">
-              Welcome back, {creator?.name}! Here's your monetization overview.
+              Welcome back, {creator?.name}! Here's your movie dashboard.
             </p>
           </div>
           <div className="flex space-x-3">
@@ -205,57 +225,53 @@ export function Dashboard() {
             <CardHeader>
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Link to="/payment-links" className="group">
-                <div className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all duration-200">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                    <CreditCard className="w-5 h-5 text-blue-600" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Link to="/movies" className="group">
+                <div className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-red-300 hover:bg-red-50 transition-all duration-200">
+                  <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-4">
+                    <CreditCard className="w-5 h-5 text-red-600" />
                   </div>
                   <div>
-                    <h4 className="font-medium text-gray-900 group-hover:text-blue-700">
-                      Manage Payment Links
+                    <h4 className="font-medium text-gray-900 group-hover:text-red-700">
+                      Manage Movies
                     </h4>
-                    <p className="text-sm text-gray-600">Create and edit payment options</p>
-                  </div>
-                </div>
-              </Link>
-
-              <Link to="/create-jara-page" className="group">
-                <div className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-purple-300 hover:bg-purple-50 transition-all duration-200">
-                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
-                    <Plus className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 group-hover:text-purple-700">
-                      Create Jara Page
-                    </h4>
-                    <p className="text-sm text-gray-600">Build your creator landing page</p>
+                    <p className="text-sm text-gray-600">Create and edit your movies</p>
                   </div>
                 </div>
               </Link>
 
               {creator?.jaraPageSlug && (
-                <a
-                  href={`/u/${creator.jaraPageSlug}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group"
-                >
-                  <div className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-green-300 hover:bg-green-50 transition-all duration-200">
-                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4">
-                      <ExternalLink className="w-5 h-5 text-green-600" />
+                <div className="space-y-3">
+                  <a
+                    href={`/u/${creator.jaraPageSlug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block"
+                  >
+                    <div className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-green-300 hover:bg-green-50 transition-all duration-200">
+                      <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                        <ExternalLink className="w-5 h-5 text-green-600" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-gray-900 group-hover:text-green-700">
+                          View Jara Page
+                        </h4>
+                        <p className="text-sm text-gray-600">Share your creator page with fans</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-medium text-gray-900 group-hover:text-green-700">
-                        View Jara Page
-                      </h4>
-                      <p className="text-sm text-gray-600">Share your creator page with fans</p>
-                    </div>
-                  </div>
-                </a>
+                  </a>
+                  <Button
+                    onClick={handleCopyJaraLink}
+                    variant="outline"
+                    className="w-full px-4 py-3 border border-gray-200 hover:border-green-300 hover:bg-green-50"
+                    leftIcon={<Copy className="w-4 h-4" />}
+                  >
+                    Copy Jara Page Link
+                  </Button>
+                </div>
               )}
 
-              <Link to="/settings" className="group">
+              <Link to="/settings" className="group md:col-span-2">
                 <div className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-green-300 hover:bg-green-50 transition-all duration-200">
                   <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4">
                     <Users className="w-5 h-5 text-green-600" />
