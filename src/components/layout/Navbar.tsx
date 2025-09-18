@@ -42,24 +42,14 @@ export function Navbar() {
                   Dashboard
                 </Link>
                 <Link
-                  to="/videos"
+                  to="/movies"
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    isActive('/videos')
+                    isActive('/movies')
                       ? 'bg-red-100 text-red-700'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                   }`}
                 >
                   Movies
-                </Link>
-                <Link
-                  to="/movies"
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    isActive('/movies')
-                      ? 'bg-purple-100 text-purple-700'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
-                >
-                  Videos
                 </Link>
               </div>
             )}

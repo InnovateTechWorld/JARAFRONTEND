@@ -58,8 +58,8 @@ export function CreatorSetup() {
       };
 
       await createCreator(creatorData);
-      toast.success('Creator profile created successfully!');
-      navigate('/dashboard');
+      toast.success('Filmmaker profile created successfully!');
+      navigate('/movies');
     } catch (error: any) {
       console.error('Error creating creator profile:', error);
       toast.error(error.message || 'Failed to create creator profile');
@@ -67,21 +67,21 @@ export function CreatorSetup() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
         <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+          <div className="w-20 h-20 bg-gradient-to-br from-red-600 to-red-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
             <Sparkles className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to Jara!</h1>
-          <p className="text-gray-600 text-lg">Let's set up your creator profile to start monetizing your content</p>
+          <p className="text-gray-600 text-lg">Let's set up your filmmaker profile to start sharing your movies</p>
         </div>
 
         <Card className="shadow-xl">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <User className="w-5 h-5" />
-              <span>Create Your Creator Profile</span>
+              <span>Create Your Filmmaker Profile</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -149,13 +149,13 @@ export function CreatorSetup() {
                 </Button>
               </div>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h4 className="font-medium text-blue-900 mb-2">What happens next?</h4>
-                <ul className="text-sm text-blue-800 space-y-1">
-                  <li>• You'll be able to create payment links for your content</li>
-                  <li>• Fans can support you with tips, memberships, and purchases</li>
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <h4 className="font-medium text-red-900 mb-2">What happens next?</h4>
+                <ul className="text-sm text-red-800 space-y-1">
+                  <li>• You'll be able to upload and share your movies</li>
+                  <li>• Fans can rent your movies and get access codes</li>
                   <li>• You'll get access to analytics and earnings reports</li>
-                  <li>• You can customize your creator page and landing pages</li>
+                  <li>• You can customize your filmmaker page and movie listings</li>
                 </ul>
               </div>
 

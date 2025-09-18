@@ -187,7 +187,7 @@ export function Movies() {
     const link = `${window.location.origin}/pay/${slug}`;
     try {
       await navigator.clipboard.writeText(link);
-      toast.success('Payment link copied to clipboard!');
+      toast.success('Movie link copied to clipboard!');
     } catch (error) {
       // Fallback for older browsers
       const textArea = document.createElement('textarea');
@@ -497,7 +497,7 @@ export function Movies() {
               label="Title"
               value={formData.title}
               onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-              placeholder="Enter payment link title"
+              placeholder="Enter movie title"
               required
             />
 
@@ -510,7 +510,7 @@ export function Movies() {
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                 rows={3}
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none"
-                placeholder="Describe what customers will receive"
+                placeholder="Describe your movie and what viewers will experience"
                 required
               />
             </div>
@@ -523,7 +523,7 @@ export function Movies() {
                 value={formData.image_url}
                 onChange={(url) => setFormData(prev => ({ ...prev, image_url: url }))}
                 onRemove={() => setFormData(prev => ({ ...prev, image_url: '' }))}
-                placeholder="Add an image to make your link more appealing"
+                placeholder="Add a movie poster or cover image"
                 folder="payment-links"
               />
             </div>
@@ -566,7 +566,7 @@ export function Movies() {
                     {editingLink ? 'Updating...' : 'Creating...'}
                   </>
                 ) : (
-                  editingLink ? 'Update Link' : 'Create Link'
+                  editingLink ? 'Update Movie' : 'Create Movie'
                 )}
               </Button>
             </div>
