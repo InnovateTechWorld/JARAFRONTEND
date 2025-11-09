@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
@@ -135,7 +134,7 @@ export function Home() {
                   size="lg"
                   className="w-full sm:w-auto px-8 focus-visible:ring-2 focus-visible:ring-red-500 focus:outline-none"
                 >
-                  Start Creating Free
+                  Start Creating for Free
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
@@ -318,7 +317,7 @@ export function Home() {
                 variant="outline"
                 className="w-full sm:w-auto px-8 bg-white text-red-600 border-white hover:bg-red-50 focus-visible:ring-2 focus-visible:ring-red-500 focus:outline-none"
               >
-                Start Uploading Free
+                Start Uploading for Free
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>
